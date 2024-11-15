@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">FIAP</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">FIAP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/editora/cadastrar}">Cadastro de Editora</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/livro/cadastrar}">Cadastro de Livro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/livro/listar}">Livros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/usuario/registrar}">Registro de usuário</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:action="@{/livro/listar}" method="get">
+                <input class="form-control me-2" type="search" name="titulo"  placeholder="Digite o título do livro" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
+                    <span sec:authentication="name"></span>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-link nav-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div layout:fragment="content"></div>
+</div>
+<hr>
+<div layout:fragment="rodape"></div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
