@@ -9,27 +9,30 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 
 @Entity
-@Table(name = "JV_GS2_MVC_ROLE")
+@Table(name = "JV_GS2_MVC_ADDRESS")
 @EntityListeners(AuditingEntityListener.class)
-public class Role {
+public class Address {
 
     @Id
     @GeneratedValue
-    @Column(name = "role_id")
+    @Column(name = "address_id")
     private Long id;
 
-    @Column(name = "nm_role", nullable = false, unique = true)
-    private String name;
+    @Column(name = "street", nullable = false, length = 100)
+    private String street;
 
-    @Column(name = "ds_label", nullable = false)
-    private String label;
+    @Column(name = "number", nullable = false, length = 100)
+    private String number;
+
+    @Column(name = "cep", nullable = false, length = 8)
+    private String postalCode;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -38,9 +41,8 @@ public class Role {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Role(String name, String user) {
-        this.name = name;
-        this.label = user;
-        this.createdAt = LocalDateTime.now();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
 }

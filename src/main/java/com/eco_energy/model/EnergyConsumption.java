@@ -9,38 +9,37 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 
 @Entity
-@Table(name = "JV_GS2_MVC_ROLE")
+@Table(name = "JV_GS2_MVC_ENERGY_CONSUMPTION")
 @EntityListeners(AuditingEntityListener.class)
-public class Role {
+public class EnergyConsumption {
 
     @Id
     @GeneratedValue
-    @Column(name = "role_id")
+    @Column(name = "energy_consumption_id")
     private Long id;
 
-    @Column(name = "nm_role", nullable = false, unique = true)
-    private String name;
+    @Column(name = "usage_time", nullable = false)
+    private LocalDateTime usageTime;
 
-    @Column(name = "ds_label", nullable = false)
-    private String label;
+    @Column(name = "kwh_consumption", nullable = false)
+    private Double kwhConsumption;
+
+    @Column(name = "energy_cost", nullable = false)
+    private Double energyCost;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "device_id", nullable = false)
+    private Device device;
 
-    public Role(String name, String user) {
-        this.name = name;
-        this.label = user;
-        this.createdAt = LocalDateTime.now();
-    }
 }

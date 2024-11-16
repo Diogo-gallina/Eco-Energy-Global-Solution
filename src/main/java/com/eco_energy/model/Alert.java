@@ -1,5 +1,6 @@
 package com.eco_energy.model;
 
+import com.eco_energy.model.enums.AlertLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,38 +10,36 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 
 @Entity
-@Table(name = "JV_GS2_MVC_ROLE")
+@Table(name = "JV_GS2_MVC_ALERT")
 @EntityListeners(AuditingEntityListener.class)
-public class Role {
+public class Alert {
 
     @Id
     @GeneratedValue
-    @Column(name = "role_id")
+    @Column(name = "alert_id")
     private Long id;
 
-    @Column(name = "nm_role", nullable = false, unique = true)
-    private String name;
+    @Column(name = "message", nullable = false, length = 100)
+    private String message;
 
-    @Column(name = "ds_label", nullable = false)
-    private String label;
+    @Column(name = "was_resolved", nullable = false)
+    private Boolean wasResolved;
+
+    @Column(name = "alert_level", nullable = false)
+    private AlertLevel alertLevel;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    public Role(String name, String user) {
-        this.name = name;
-        this.label = user;
-        this.createdAt = LocalDateTime.now();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "device_id", nullable = false)
+    private Device device;
 }

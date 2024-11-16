@@ -17,27 +17,23 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initDatabase(CustomerRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            Role adminRole = new Role();
-            adminRole.setName("ROLE_ADMIN");
-            adminRole.setLabel("Admin");
+            Role adminRole = new Role("ROLE_ADMIN", "Admin");
             roleRepository.save(adminRole);
 
-            Role userRole = new Role();
-            userRole.setName("ROLE_USER");
-            userRole.setLabel("User");
+            Role userRole = new Role("ROLE_USER", "User");
             roleRepository.save(userRole);
 
             Customer admin = new Customer(
-                    "admin",
-                    "admin@email",
+                    "admin2",
+                    "admin2@email",
                     passwordEncoder.encode("admin"),
                     Set.of(adminRole)
             );
             userRepository.save(admin);
 
             Customer user = new Customer(
-                    "user1",
-                    "user1@email",
+                    "user2",
+                    "user2@email",
                     passwordEncoder.encode("password"),
                     Set.of(userRole)
             );
