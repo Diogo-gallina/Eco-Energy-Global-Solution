@@ -45,8 +45,8 @@ public class Customer {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "JV_GS2_MVC_CUSTOMER_ROLE",
-            joinColumns = @JoinColumn(name="customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name="customer_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
