@@ -28,7 +28,7 @@ public class Address {
     @Column(name = "street", nullable = false, length = 100)
     private String street;
 
-    @Column(name = "number", nullable = false, length = 100)
+    @Column(name = "address_number", nullable = false, length = 100)
     private String number;
 
     @Column(name = "cep", nullable = false, length = 8)
