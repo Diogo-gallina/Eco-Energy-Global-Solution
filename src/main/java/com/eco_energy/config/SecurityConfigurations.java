@@ -23,7 +23,7 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/public/**", "/login", "/webjars/**", "/css/**").permitAll()
-                        .requestMatchers("/admin/**", "/usuario/registrar").hasRole("ADMIN") // Restringe o acesso para ADMIN
+                        .requestMatchers("/admin/**", "/**").hasRole("ADMIN") // Restringe o acesso para ADMIN
                         .requestMatchers("/user/**").hasRole("USER") // Restringe o acesso para USER
                         .anyRequest().authenticated()
                 )
