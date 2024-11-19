@@ -28,8 +28,8 @@ public class Address {
     @Column(name = "street", nullable = false, length = 100)
     private String street;
 
-    @Column(name = "address_number", nullable = false, length = 100)
-    private String number;
+    @Column(name = "address_number", nullable = false, length = 99999)
+    private Integer number;
 
     @Column(name = "cep", nullable = false, length = 8)
     private String postalCode;
@@ -44,5 +44,14 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    public Address(String street, Integer number, String postalCode, Customer customer) {
+        this.street = street;
+        this.number = number;
+        this.postalCode = postalCode;
+        this.createdAt = LocalDateTime.now();
+        this.customer = customer;
+        customer.getAddresses().add(this);
+    }
 
 }

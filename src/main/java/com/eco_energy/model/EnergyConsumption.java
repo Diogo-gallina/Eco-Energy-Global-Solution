@@ -42,4 +42,13 @@ public class EnergyConsumption {
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
 
+    public EnergyConsumption(LocalDateTime usageTime, Double kwhConsumption, Double energyCost, Device device) {
+        this.usageTime = usageTime;
+        this.kwhConsumption = kwhConsumption;
+        this.energyCost = energyCost;
+        this.createdAt = LocalDateTime.now();
+        this.device = device;
+        device.getEnergyConsumptions().add(this);
+    }
+
 }

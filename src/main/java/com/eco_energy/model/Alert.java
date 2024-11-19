@@ -42,4 +42,12 @@ public class Alert {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
+
+    public Alert(String message, Boolean wasResolved, AlertLevel alertLevel, Device device) {
+        this.message = message;
+        this.wasResolved = wasResolved;
+        this.alertLevel = alertLevel;
+        this.device = device;
+        device.getAlerts().add(this);
+    }
 }
