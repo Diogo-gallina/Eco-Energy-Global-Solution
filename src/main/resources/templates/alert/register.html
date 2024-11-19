@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Alerta</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Registrar Alerta</h1>
+
+    <form th:action="@{/alert/register}" th:object="${alertDTO}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Mensagem:</label>
+            <input type="text" id="message" th:field="*{message}" placeholder="Mensagem do alerta" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status de Resolução:</label>
+            <input type="checkbox" id="wasResolved" th:field="*{wasResolved}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nível de Alerta:</label>
+            <select th:field="*{alertLevel}" class="form-control" required>
+                <option value="" disabled selected>Selecione o nível do alerta</option>
+                <option th:each="level : ${alertLevel}" th:value="${level}" th:text="${level}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Dispositivo:</label>
+            <select th:field="*{deviceId}" class="form-control" required>
+                <option value="" disabled selected>Selecione o Dispositivo</option>
+                <option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.name}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Registrar Alerta</button>
+    </form>
+
+    <div th:if="${msg != null}">
+        <div class="alert alert-success" th:text="${msg}"></div>
+    </div>
+</div>
+</body>
+</html>

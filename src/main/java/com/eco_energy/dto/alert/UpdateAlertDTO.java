@@ -12,7 +12,9 @@ public record UpdateAlertDTO(
 
         Boolean wasResolved,
 
-        AlertLevel alertLevel
+        AlertLevel alertLevel,
+
+        Long deviceId
 
 ) {
 }

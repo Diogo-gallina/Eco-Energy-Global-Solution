@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Consumo de Energia</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Registrar Consumo de Energia</h1>
+
+    <div th:if="${msg != null}" class="alert alert-success">
+        <span th:text="${msg}"></span>
+    </div>
+
+    <form th:action="@{/energy-consumption/register}" th:object="${energyConsumptionDTO}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Tempo de Uso:</label>
+            <input type="datetime-local" id="usageTime" th:field="*{usageTime}" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Consumo (kWh):</label>
+            <input type="number" step="0.01" id="kwhConsumption" th:field="*{kwhConsumption}" placeholder="Consumo em kWh" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Custo da Energia:</label>
+            <input type="number" step="0.01" id="energyCost" th:field="*{energyCost}" placeholder="Custo da energia" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Dispositivo:</label>
+            <select th:field="*{deviceId}" class="form-control" required>
+                <option value="" disabled selected>Selecione o Dispositivo</option>
+                <option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.name}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar Consumo</button>
+    </form>
+</div>
+</body>
+</html>

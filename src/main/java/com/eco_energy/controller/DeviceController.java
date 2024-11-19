@@ -4,6 +4,7 @@ import com.eco_energy.dto.device.CreateDeviceDTO;
 import com.eco_energy.dto.device.UpdateDeviceDTO;
 import com.eco_energy.model.Customer;
 import com.eco_energy.model.Device;
+import com.eco_energy.model.enums.UsageFrequency;
 import com.eco_energy.repository.AlertRepository;
 import com.eco_energy.repository.CustomerRepository;
 import com.eco_energy.repository.DeviceRepository;
@@ -38,6 +39,7 @@ public class DeviceController {
     @GetMapping("register")
     public String register(CreateDeviceDTO deviceDTO, Model model) {
         model.addAttribute("deviceDTO", new CreateDeviceDTO("", 0, null, null));
+        model.addAttribute("usageFrequencies", UsageFrequency.values());
         model.addAttribute("customers", customerRepository.findAll());
         return "device/register";
     }
@@ -80,6 +82,7 @@ public class DeviceController {
         );
 
         model.addAttribute("deviceDTO", deviceDTO);
+        model.addAttribute("usageFrequencies", UsageFrequency.values());
         model.addAttribute("customers", customerRepository.findAll());
         return "device/update";
     }

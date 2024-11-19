@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Dispositivos</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Listagem de Dispositivos</h1>
+        <a th:href="@{/device/register}" class="btn btn-success">
+            Cadastrar Aparelho
+        </a>
+    </div>
+
+    <div th:if="!${#strings.isEmpty(msg)}" class="alert alert-success">
+        <span th:text="${msg}"></span>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Potência Elétrica</th>
+            <th>Frequência de Uso</th>
+            <th>Data de Criação</th>
+            <th>Data de Atualização</th>
+            <th>Cliente</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="device : ${devices}">
+            <td th:text="${device.id}"></td>
+            <td th:text="${device.name}"></td>
+            <td th:text="${device.electricalPower}"></td>
+            <td th:text="${device.usageFrequency}"></td>
+            <td th:text="${device.createdAt}"></td>
+            <td th:text="${device.updatedAt}"></td>
+            <td th:text="${device.customer.name}"></td>
+            <td>
+                <a th:href="@{/device/update/}+${device.id}" class="btn btn-sm btn-primary">Editar</a>
+                <button th:onclick="|deviceId.value = ${device.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deseja realmente excluir este dispositivo?
+                </div>
+                <div class="modal-footer">
+                    <form th:action="@{/device/delete}" method="post">
+                        <input type="hidden" id="deviceId" name="idDevice">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                        <button type="submit" class="btn btn-danger">Sim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Listagem de Alertas</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h1>Listagem de Alertas</h1>
+    <a th:href="@{/alert/register}" class="btn btn-success">
+      Criar Alerta
+    </a>
+  </div>
+
+  <div th:if="!${#strings.isEmpty(msg)}" class="alert alert-success">
+    <span th:text="${msg}"></span>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Mensagem</th>
+      <th>Status de Resolução</th>
+      <th>Nível de Alerta</th>
+      <th>Dispositivo</th>
+      <th>Data de Criação</th>
+      <th>Data de Atualização</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="alert : ${alerts}">
+      <td th:text="${alert.id}"></td>
+      <td th:text="${alert.message}"></td>
+      <td th:text="${alert.wasResolved ? 'Resolvido' : 'Não Resolvido'}"></td>
+      <td th:text="${alert.alertLevel}"></td>
+      <td th:text="${alert.device.name}"></td>
+      <td th:text="${alert.createdAt}"></td>
+      <td th:text="${alert.updatedAt}"></td>
+      <td>
+        <a th:href="@{/alert/update/}+${alert.id}" class="btn btn-sm btn-primary">Editar</a>
+        <button th:onclick="|alertId.value = ${alert.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+          Excluir
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirmação de Exclusão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Deseja realmente excluir este alerta?
+        </div>
+        <div class="modal-footer">
+          <form th:action="@{/alert/delete}" method="post">
+            <input type="hidden" id="alertId" name="idAlert">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+            <button type="submit" class="btn btn-danger">Sim</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

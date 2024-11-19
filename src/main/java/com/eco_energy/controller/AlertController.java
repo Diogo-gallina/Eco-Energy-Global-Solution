@@ -4,6 +4,7 @@ import com.eco_energy.dto.alert.CreateAlertDTO;
 import com.eco_energy.dto.alert.UpdateAlertDTO;
 import com.eco_energy.model.Alert;
 import com.eco_energy.model.Device;
+import com.eco_energy.model.enums.AlertLevel;
 import com.eco_energy.repository.AlertRepository;
 import com.eco_energy.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class AlertController {
     @GetMapping("register")
     public String register(CreateAlertDTO alertDTO, Model model) {
         model.addAttribute("alertDTO", new CreateAlertDTO("", false, null, null));
+        model.addAttribute("alertLevel", AlertLevel.values());
         model.addAttribute("devices", deviceRepository.findAll());
         return "alert/register";
     }
@@ -68,10 +70,13 @@ public class AlertController {
                 alert.getId(),
                 alert.getMessage(),
                 alert.getWasResolved(),
-                alert.getAlertLevel()
+                alert.getAlertLevel(),
+                alert.getDevice().getId()
         );
 
         model.addAttribute("alertDTO", alertDTO);
+        model.addAttribute("alertLevel", AlertLevel.values());
+        model.addAttribute("devices", deviceRepository.findAll());
         return "alert/update";
     }
 
@@ -81,9 +86,13 @@ public class AlertController {
         Alert alert = alertRepository.findById(alertDTO.id())
                 .orElseThrow(() -> new IllegalArgumentException("Alerta não encontrado!"));
 
+        Device device = deviceRepository.findById(alertDTO.deviceId())
+                .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado!"));
+
         alert.setMessage(alertDTO.message());
         alert.setWasResolved(alertDTO.wasResolved());
         alert.setAlertLevel(alertDTO.alertLevel());
+        alert.setDevice(device);
 
         alertRepository.save(alert);
 

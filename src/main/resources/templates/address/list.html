@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Endereços</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Listagem de Endereços</h1>
+        <a th:href="@{/address/register}" class="btn btn-success">
+            Cadastrar Endereço
+        </a>
+    </div>
+
+    <div th:if="!${#strings.isEmpty(msg)}" class="alert alert-success">
+        <span th:text="${msg}"></span>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Rua</th>
+            <th>Número</th>
+            <th>CEP</th>
+            <th>Data de Criação</th>
+            <th>Data de Atualização</th>
+            <th>Cliente</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="address : ${addresses}">
+            <td th:text="${address.id}"></td>
+            <td th:text="${address.street}"></td>
+            <td th:text="${address.number}"></td>
+            <td th:text="${address.postalCode}"></td>
+            <td th:text="${address.createdAt}"></td>
+            <td th:text="${address.updatedAt}"></td>
+            <td th:text="${address.customer.name}"></td>
+            <td>
+                <a th:href="@{/address/update/}+${address.id}" class="btn btn-sm btn-primary">Editar</a>
+                <button th:onclick="|addressId.value = ${address.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deseja realmente excluir este endereço?
+                </div>
+                <div class="modal-footer">
+                    <form th:action="@{/address/delete}" method="post">
+                        <input type="hidden" id="addressId" name="idAddress">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                        <button type="submit" class="btn btn-danger">Sim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

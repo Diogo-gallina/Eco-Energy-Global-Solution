@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Consumo de Energia</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Consumo de Energia</h1>
+        <a th:href="@{/energy-consumption/register}" class="btn btn-success">
+            Registrar Consumo de Energia
+        </a>
+    </div>
+
+    <div th:if="!${#strings.isEmpty(msg)}" class="alert alert-success">
+        <span th:text="${msg}"></span>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tempo de Uso</th>
+            <th>Consumo (kWh)</th>
+            <th>Custo da Energia</th>
+            <th>Dispositivo</th>
+            <th>Data de Criação</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="energyConsumption : ${energyConsumptions}">
+            <td th:text="${energyConsumption.id}"></td>
+            <td th:text="${energyConsumption.usageTime}"></td>
+            <td th:text="${energyConsumption.kwhConsumption}"></td>
+            <td th:text="${energyConsumption.energyCost}"></td>
+            <td th:text="${energyConsumption.device.name}"></td>
+            <td th:text="${energyConsumption.createdAt}"></td>
+            <td>
+                <a th:href="@{/energy-consumption/update/{id}(id=${energyConsumption.id})}" class="btn btn-sm btn-primary">Editar</a>
+
+                <button th:onclick="|energyConsumptionId.value = ${energyConsumption.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deseja realmente excluir este consumo de energia?
+                </div>
+                <div class="modal-footer">
+                    <form th:action="@{/energy-consumption/delete}" method="post">
+                        <input type="hidden" id="energyConsumptionId" name="id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                        <button type="submit" class="btn btn-danger">Sim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

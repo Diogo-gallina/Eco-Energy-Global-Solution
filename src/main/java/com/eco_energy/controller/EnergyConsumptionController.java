@@ -68,10 +68,12 @@ public class EnergyConsumptionController {
                 energyConsumption.getId(),
                 energyConsumption.getUsageTime(),
                 energyConsumption.getKwhConsumption(),
-                energyConsumption.getEnergyCost()
+                energyConsumption.getEnergyCost(),
+                energyConsumption.getDevice().getId()
         );
 
         model.addAttribute("energyConsumptionDTO", energyConsumptionDTO);
+        model.addAttribute("devices", deviceRepository.findAll());
         return "energy-consumption/update";
     }
 
@@ -81,9 +83,13 @@ public class EnergyConsumptionController {
         EnergyConsumption energyConsumption = energyConsumptionRepository.findById(energyConsumptionDTO.id())
                 .orElseThrow(() -> new IllegalArgumentException("Consumo de energia não encontrado!"));
 
+        Device device = deviceRepository.findById(energyConsumptionDTO.deviceId())
+                .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado!"));
+
         energyConsumption.setUsageTime(energyConsumptionDTO.usageTime());
         energyConsumption.setKwhConsumption(energyConsumptionDTO.kwhConsumption());
         energyConsumption.setEnergyCost(energyConsumptionDTO.energyCost());
+        energyConsumption.setDevice(device);
 
         energyConsumptionRepository.save(energyConsumption);
 

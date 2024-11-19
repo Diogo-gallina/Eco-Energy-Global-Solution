@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Endereço</title>
+</head>
+<body>
+<div class="container" layout:fragment="conteudo">
+    <h1>Registrar Endereço</h1>
+
+    <form th:action="@{/address/register}" th:object="${addressDTO}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Rua:</label>
+            <input type="text" id="street" th:field="*{street}" placeholder="Nome da rua" required />
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Número:</label>
+            <input type="text" id="number" th:field="*{number}" placeholder="Número do endereço" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">CEP:</label>
+            <input type="text" id="postalCode" th:field="*{postalCode}" placeholder="CEP" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ID do Cliente:</label>
+            <input type="number" id="customerId" th:field="*{customerId}" placeholder="ID do Cliente" required />
+        </div>
+
+        <button type="submit">Registrar</button>
+    </form>
+
+    <div th:if="${msg != null}">
+        <p th:text="${msg}"></p>
+    </div>
+</div>
+</body>
+</html>

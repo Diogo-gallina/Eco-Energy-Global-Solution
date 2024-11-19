@@ -4,7 +4,7 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Register User</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -13,6 +13,10 @@
         <div class="form-group">
             <label for="username">Nome de Usuário:</label>
             <input type="text" class="form-control" id="username" th:field="*{username}">
+        </div>
+        <div class="form-group">
+            <label for="email">Nome de Usuário:</label>
+            <input type="text" class="form-control" id="email" th:field="*{email}">
         </div>
         <div class="form-group">
             <label for="password">Senha:</label>

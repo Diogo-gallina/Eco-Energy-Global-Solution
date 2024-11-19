@@ -2,6 +2,9 @@ package com.eco_energy.model;
 
 import com.eco_energy.model.enums.UsageFrequency;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,4 +55,13 @@ public class Device {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    public Device(String name, Integer electricalPower, UsageFrequency usageFrequency, Customer customer) {
+        this.name = name;
+        this.electricalPower = electricalPower;
+        this.usageFrequency = usageFrequency;
+        this.createdAt = LocalDateTime.now();
+        this.customer = customer;
+        customer.getDevices().add(this);
+    }
 }

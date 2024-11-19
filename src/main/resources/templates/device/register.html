@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Dispositivo</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Registrar Dispositivo</h1>
+
+    <form th:action="@{/device/register}" th:object="${deviceDTO}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Dispositivo:</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Nome do dispositivo" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Potência Elétrica:</label>
+            <input type="number" id="electricalPower" th:field="*{electricalPower}" placeholder="Potência elétrica em Watts" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Frequência de Uso:</label>
+            <select id="usageFrequency" th:field="*{usageFrequency}" required>
+                <option value="" disabled selected>Selecione a frequência de uso</option>
+                <option th:each="usageFrequency : ${usageFrequencies}"
+                        th:value="${usageFrequency}"
+                        th:text="${usageFrequency.label}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ID do Cliente:</label>
+            <input type="number" id="customerId" th:field="*{customerId}" placeholder="ID do Cliente" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Registrar</button>
+    </form>
+
+    <div th:if="${msg != null}">
+        <p th:text="${msg}"></p>
+    </div>
+</div>
+</body>
+</html>

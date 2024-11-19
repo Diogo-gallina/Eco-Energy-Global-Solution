@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5"
-      layout:decorate="~{layout}">
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -31,7 +29,7 @@
     <div class="container">
         <h1>Login</h1>
         <form th:action="@{/login}" method="post">
-            <div th:if="${param.error}" class="text-error">
+            <div th:if="${param.error}" class="text-danger">
                 Nome de usuário ou senha inválidos. Por favor, tente novamente.
             </div>
             <div class="row mb-3">

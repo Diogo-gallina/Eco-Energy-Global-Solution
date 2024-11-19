@@ -6,5 +6,6 @@ public record UpdateEnergyConsumptionDTO(
         Long id,
         LocalDateTime usageTime,
         Double kwhConsumption,
-        Double energyCost
+        Double energyCost,
+        Long deviceId
 ) { }

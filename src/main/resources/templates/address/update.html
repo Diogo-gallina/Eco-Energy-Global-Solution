@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Atualizar Endereço</title>
+</head>
+<body>
+    <div class="container" layout:fragment="content">
+        <h1>Atualizar Endereço</h1>
+
+        <form th:action="@{/address/update}" th:object="${addressDTO}" method="post">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label class="form-label">Rua:</label>
+                <input type="text" th:field="*{street}" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Número:</label>
+                <input type="text" th:field="*{number}" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">CEP:</label>
+                <input type="text" th:field="*{postalCode}" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cliente:</label>
+                <select th:field="*{customerId}" required>
+                    <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.name}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Atualizar</button>
+        </form>
+    </div>
+</body>
+</html>

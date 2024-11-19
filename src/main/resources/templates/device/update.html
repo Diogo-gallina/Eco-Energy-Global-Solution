@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Atualizar Dispositivo</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Atualizar Dispositivo</h1>
+
+    <form th:action="@{/device/update}" th:object="${deviceDTO}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Dispositivo:</label>
+            <input type="text" th:field="*{name}" placeholder="Nome do dispositivo" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Potência Elétrica (W):</label>
+            <input type="number" th:field="*{electricalPower}" placeholder="Potência elétrica" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Frequência de Uso:</label>
+            <select th:field="*{usageFrequency}" required>
+                <option value="" disabled selected>Selecione a frequência de uso</option>
+                <option th:each="usageFrequency : ${usageFrequencies}"
+                        th:value="${usageFrequency}"
+                        th:text="${usageFrequency.label}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cliente:</label>
+            <select th:field="*{customerId}" required>
+                <option th:each="customer : ${customers}"
+                        th:value="${customer.id}"
+                        th:text="${customer.name}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Atualizar</button>
+    </form>
+</div>
+</body>
+</html>
