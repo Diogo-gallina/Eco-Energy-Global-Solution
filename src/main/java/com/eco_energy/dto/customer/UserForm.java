@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class UserForm {
     private String username;
+    private String email;
     private String password;
     private List<String> roles;
 }
