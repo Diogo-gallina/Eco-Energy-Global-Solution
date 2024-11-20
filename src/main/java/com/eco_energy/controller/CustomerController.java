@@ -37,7 +37,7 @@ public class CustomerController {
                 userForm.getEmail(),
                 passwordEncoder.encode(userForm.getPassword()),
                 userRole);
-        return "redirect:customer/register";
+        return "redirect:login";
     }
 
     @GetMapping("/admin/register")
