@@ -22,24 +22,20 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private CustomerRepository userRepository;
-
     @Autowired
     private RoleRepository roleRepository;
 
-    public void saveUser(String username, String password, List<String> roles) {
-        Customer user = new Customer();
-        user.setUsername(username);
-        user.setPassword(password);
+    public void saveUser(String username, String email, String password, Role role) {
+        Customer customer = new Customer(username, email, password);
 
         HashSet<Role> userRoles = new HashSet<>();
-        for (String roleName : roles) {
-            Role role = roleRepository.findByName(roleName);
-            if (role != null) {
-                userRoles.add(role);
-            }
-        }
-        user.setRoles(userRoles);
-        userRepository.save(user);
+        Role findedRole = roleRepository.findByName(role.getName());
+
+        if (findedRole == null) throw new UsernameNotFoundException("Role not found");
+
+        userRoles.add(role);
+        customer.setRoles(userRoles);
+        userRepository.save(customer);
     }
 
     @Override

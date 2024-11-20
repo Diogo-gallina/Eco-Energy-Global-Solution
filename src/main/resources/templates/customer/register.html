@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Register User</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
 </head>
 <body>
-<div layout:fragment="content">
     <nav>
         <ul class="navbar-nav">
             <li class="nav-item" sec:authorize="!isAuthenticated()">
@@ -17,29 +15,35 @@
         </ul>
     </nav>
 
-    <h1>Eco Energy - Spring MVC</h1>
-    <form th:action="@{/register}" th:object="${userForm}" method="post">
-        <div class="form-group">
-            <label for="username">Nome de Usuário:</label>
-            <input type="text" class="form-control" id="username" th:field="*{username}">
-        </div>
-        <div class="form-group">
-            <label for="email">Nome de Usuário:</label>
-            <input type="text" class="form-control" id="email" th:field="*{email}">
-        </div>
-        <div class="form-group">
-            <label for="password">Senha:</label>
-            <input type="password" class="form-control" id="password" th:field="*{password}">
-        </div>
-        <div class="form-group">
-            <label>Roles:</label><br>
-            <div th:each="role : ${roles}">
-                <input type="checkbox" th:field="*{roles}" th:value="${role.name}">
-                <label th:text="${role.label}"></label><br>
+    <div class="container">
+        <h1>Cadastro</h1>
+        <form th:action="@{/register}" th:object="${userForm}" method="post">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="username">Nome de Usuário:</label>
+                    <input type="text" class="form-control" id="username" th:field="*{username}">
+                </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-    </form>
-</div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="email">Email:</label>
+                    <input type="text" class="form-control" id="email" th:field="*{email}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="password">Senha:</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                    <div class="col">
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
+                    </div>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

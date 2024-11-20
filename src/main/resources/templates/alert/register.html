@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar Alerta</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="container" layout:fragment="content">
@@ -33,16 +34,22 @@
             <label class="form-label">Dispositivo:</label>
             <select th:field="*{deviceId}" class="form-control" required>
                 <option value="" disabled selected>Selecione o Dispositivo</option>
-                <option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.name}"></option>
+                <option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.getName()}"></option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Registrar Alerta</button>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-success">Registrar</button>
+            </div>
+        </div>
     </form>
 
     <div th:if="${msg != null}">
         <div class="alert alert-success" th:text="${msg}"></div>
     </div>
 </div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

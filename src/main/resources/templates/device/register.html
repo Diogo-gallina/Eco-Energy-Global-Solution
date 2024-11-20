@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar Dispositivo</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="container" layout:fragment="content">
@@ -31,12 +32,18 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Registrar</button>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-success">Registrar</button>
+            </div>
+        </div>
     </form>
 
     <div th:if="${msg != null}">
         <p th:text="${msg}"></p>
     </div>
 </div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

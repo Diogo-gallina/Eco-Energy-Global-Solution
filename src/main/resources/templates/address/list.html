@@ -41,7 +41,7 @@
             <td th:text="${address.postalCode}"></td>
             <td th:text="${address.createdAt}"></td>
             <td th:text="${address.updatedAt}"></td>
-            <td th:text="${address.customer.name}"></td>
+            <td th:text="${address.customer.username}"></td>
             <td>
                 <a th:href="@{/address/update/}+${address.id}" class="btn btn-sm btn-primary">Editar</a>
                 <button th:onclick="|addressId.value = ${address.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">

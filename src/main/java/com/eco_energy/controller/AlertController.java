@@ -51,7 +51,7 @@ public class AlertController {
 
         alertRepository.save(alert);
         redirectAttributes.addFlashAttribute("msg", "Alerta registrado com sucesso!");
-        return "redirect:/alert/register";
+        return "redirect:/alert/list";
     }
 
     @GetMapping("list")

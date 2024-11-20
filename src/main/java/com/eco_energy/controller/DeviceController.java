@@ -63,7 +63,7 @@ public class DeviceController {
 
         deviceRepository.save(device);
         redirectAttributes.addFlashAttribute("msg", "Dispositivo registrado com sucesso!");
-        return "redirect:/device/register";
+        return "redirect:/device/list";
     }
 
     @GetMapping("list")

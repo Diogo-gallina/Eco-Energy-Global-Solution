@@ -41,7 +41,6 @@
       <td th:text="${alert.alertLevel}"></td>
       <td th:text="${alert.device.name}"></td>
       <td th:text="${alert.createdAt}"></td>
-      <td th:text="${alert.updatedAt}"></td>
       <td>
         <a th:href="@{/alert/update/}+${alert.id}" class="btn btn-sm btn-primary">Editar</a>
         <button th:onclick="|alertId.value = ${alert.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">

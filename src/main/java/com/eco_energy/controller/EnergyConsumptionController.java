@@ -49,7 +49,7 @@ public class EnergyConsumptionController {
 
         energyConsumptionRepository.save(energyConsumption);
         redirectAttributes.addFlashAttribute("msg", "Consumo de energia registrado com sucesso!");
-        return "redirect:/energy-consumption/register";
+        return "redirect:/energy-consumption/list";
     }
 
     @GetMapping("list")

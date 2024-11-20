@@ -48,6 +48,7 @@ public class Alert {
         this.wasResolved = wasResolved;
         this.alertLevel = alertLevel;
         this.device = device;
+        this.createdAt = LocalDateTime.now();
         device.getAlerts().add(this);
     }
 }

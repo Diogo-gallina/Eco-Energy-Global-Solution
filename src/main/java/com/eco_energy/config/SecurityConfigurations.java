@@ -22,18 +22,18 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/public/**", "/login", "/webjars/**", "/css/**").permitAll()
-                        .requestMatchers("/admin/**", "/**").hasRole("ADMIN") // Restringe o acesso para ADMIN
-                        .requestMatchers("/user/**").hasRole("USER") // Restringe o acesso para USER
+                        .requestMatchers("/public/**", "/login",  "/register", "/webjars/**", "/css/**").permitAll()
+                        .requestMatchers("/**").hasRole("USER")
+                        .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Página de login personalizada
-                        .defaultSuccessUrl("/home") // Página de redirecionamento após sucesso no login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout") // Redirecionamento após logout
+                        .logoutSuccessUrl("/login?logout")
                 );
         return http.build();
     }

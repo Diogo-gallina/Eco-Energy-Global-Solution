@@ -55,11 +55,10 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Device> devices;
 
-    public Customer(String username, String email, String password, Set<Role> roles) {
+    public Customer(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.roles = roles;
         this.createdAt = LocalDateTime.now();
     }
 

@@ -53,7 +53,7 @@ public class AddressController {
 
         addressRepository.save(address);
         redirectAttributes.addFlashAttribute("msg", "Endereço registrado com sucesso!");
-        return "redirect:/address/register";
+        return "redirect:/address/list";
     }
 
     @GetMapping("list")

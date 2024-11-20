@@ -11,9 +11,7 @@ public record UpdateAddressDTO(
         Integer number,
 
         @Size(max = 8, message = "CEP pode ter no máximo 8 caracteres")
-        String postalCode,
-
-        Long customerId
+        String postalCode
 
 ) {
 
