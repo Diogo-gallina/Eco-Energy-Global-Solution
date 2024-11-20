@@ -7,6 +7,7 @@ import com.eco_energy.model.Customer;
 import com.eco_energy.repository.AddressRepository;
 import com.eco_energy.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -30,15 +31,18 @@ public class AddressController {
 
     @GetMapping("register")
     public String register(CreateAddressDTO addressDTO, Model model){
-        model.addAttribute("addressDTO", new CreateAddressDTO("", null, "", null));
+        model.addAttribute("addressDTO", new CreateAddressDTO("", null, ""));
         return "address/register";
     }
 
     @PostMapping("register")
     @Transactional
-    public String register(CreateAddressDTO addressDTO, RedirectAttributes redirectAttributes){
-        Customer customer = customerRepository.findById(addressDTO.customerId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
+    public String register(CreateAddressDTO addressDTO, RedirectAttributes redirectAttributes, Authentication authentication){
+        String username = authentication.getName();
+
+        Customer customer = customerRepository.findByUsername(username);
+        if(customer == null) new IllegalArgumentException("Cliente não encontrado!");
+        assert customer != null;
 
         Address address = new Address(
                 addressDTO.street(),
@@ -68,8 +72,7 @@ public class AddressController {
                 address.getId(),
                 address.getStreet(),
                 address.getNumber(),
-                address.getPostalCode(),
-                address.getCustomer().getId()
+                address.getPostalCode()
         );
 
         model.addAttribute("addressDTO", addressDTO);
@@ -86,11 +89,6 @@ public class AddressController {
         address.setStreet(addressDTO.street());
         address.setNumber(addressDTO.number());
         address.setPostalCode(addressDTO.postalCode());
-
-        Customer customer = customerRepository.findById(addressDTO.customerId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
-        address.setCustomer(customer);
-
         address.setUpdatedAt(LocalDateTime.now());
 
         addressRepository.save(address);

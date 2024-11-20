@@ -15,10 +15,6 @@ public record CreateAddressDTO(
 
         @NotBlank(message = "CEP não pode ser vazio")
         @Size(min = 8, max = 8, message = "CEP deve conter 8 caracteres")
-        String postalCode,
-
-        @NotNull(message = "ID do cliente não pode ser nulo")
-        Long customerId
-
+        String postalCode
 ) {
 }

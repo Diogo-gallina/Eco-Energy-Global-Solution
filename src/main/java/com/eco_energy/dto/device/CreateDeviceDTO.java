@@ -14,8 +14,6 @@ public record CreateDeviceDTO(
         Integer electricalPower,
 
         @NotNull(message = "A frequência de uso não pode ser nula")
-        com.eco_energy.model.enums.UsageFrequency usageFrequency,
+        com.eco_energy.model.enums.UsageFrequency usageFrequency
 
-        @NotNull(message = "O ID do cliente não pode ser nulo")
-        Long customerId
 ) {}

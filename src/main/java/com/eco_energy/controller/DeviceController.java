@@ -10,6 +10,7 @@ import com.eco_energy.repository.CustomerRepository;
 import com.eco_energy.repository.DeviceRepository;
 import com.eco_energy.repository.EnergyConsumptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -38,7 +39,7 @@ public class DeviceController {
 
     @GetMapping("register")
     public String register(CreateDeviceDTO deviceDTO, Model model) {
-        model.addAttribute("deviceDTO", new CreateDeviceDTO("", 0, null, null));
+        model.addAttribute("deviceDTO", new CreateDeviceDTO("", 0, null));
         model.addAttribute("usageFrequencies", UsageFrequency.values());
         model.addAttribute("customers", customerRepository.findAll());
         return "device/register";
@@ -46,9 +47,12 @@ public class DeviceController {
 
     @PostMapping("register")
     @Transactional
-    public String register(CreateDeviceDTO deviceDTO, RedirectAttributes redirectAttributes) {
-        Customer customer = customerRepository.findById(deviceDTO.customerId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
+    public String register(CreateDeviceDTO deviceDTO, RedirectAttributes redirectAttributes, Authentication authentication) {
+        String username = authentication.getName();
+
+        Customer customer = customerRepository.findByUsername(username);
+        if(customer == null) new IllegalArgumentException("Cliente não encontrado!");
+        assert customer != null;
 
         Device device = new Device(
                 deviceDTO.name(),
