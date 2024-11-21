@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity5"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Register Admin</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
 </head>
 <body>
-<div layout:fragment="content">
-    <nav>
-        <ul class="navbar-nav">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" href="/login">Login</a>
-            </li>
-        </ul>
-    </nav>
+<div class="container" layout:fragment="content">
 
     <h1>Eco Energy - Spring MVC</h1>
-    <form th:action="@{/register}" th:object="${userForm}" method="post">
-        <div class="form-group">
+    <form th:action="@{admin/register}" th:object="${userForm}" method="post">
+
+        <div class="mb-3">
             <label for="username">Nome de Usuário:</label>
             <input type="text" class="form-control" id="username" th:field="*{username}">
         </div>
-        <div class="form-group">
+
+        <div class="mb-3">
             <label for="email">Email:</label>
             <input type="text" class="form-control" id="email" th:field="*{email}">
         </div>
-        <div class="form-group">
+
+        <div class="mb-3">
             <label for="password">Senha:</label>
             <input type="password" class="form-control" id="password" th:field="*{password}">
         </div>
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+        </div>
     </form>
 </div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

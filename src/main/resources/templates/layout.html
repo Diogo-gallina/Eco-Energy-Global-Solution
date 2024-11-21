@@ -20,16 +20,19 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/home">Home</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/list}">Administradores e Usuários</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
                     <a class="nav-link" th:href="@{/address/list}">Endereços</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
                     <a class="nav-link" th:href="@{/device/list}">Aparelhos</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
                     <a class="nav-link" th:href="@{/energy-consumption/list}">Consumo de Energia</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
                     <a class="nav-link" th:href="@{/alert/list}">Alertas</a>
                 </li>
             </ul>

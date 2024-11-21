@@ -26,9 +26,6 @@ public class Address {
     @Column(name = "address_id")
     private Long id;
 
-    @Column(name = "brazilian_state", nullable = false, length = 35)
-    private BrazilianStates brazilianState;
-
     @Column(name = "street", nullable = false, length = 100)
     private String street;
 
