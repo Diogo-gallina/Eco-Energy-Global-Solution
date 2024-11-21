@@ -1,5 +1,6 @@
 package com.eco_energy.model;
 
+import com.eco_energy.model.enums.BrazilianStates;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class Address {
     @GeneratedValue
     @Column(name = "address_id")
     private Long id;
+
+    @Column(name = "brazilian_state", nullable = false, length = 35)
+    private BrazilianStates brazilianState;
 
     @Column(name = "street", nullable = false, length = 100)
     private String street;
