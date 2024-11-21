@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class EnergyConsumption {
     private Long id;
 
     @Column(name = "usage_time", nullable = false)
-    private LocalDateTime usageTime;
+    private LocalTime usageTime;
 
     @Column(name = "kwh_consumption", nullable = false)
     private Double kwhConsumption;
@@ -42,7 +43,7 @@ public class EnergyConsumption {
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
 
-    public EnergyConsumption(LocalDateTime usageTime, Double kwhConsumption, Double energyCost, Device device) {
+    public EnergyConsumption(LocalTime usageTime, Double kwhConsumption, Double energyCost, Device device) {
         this.usageTime = usageTime;
         this.kwhConsumption = kwhConsumption;
         this.energyCost = energyCost;

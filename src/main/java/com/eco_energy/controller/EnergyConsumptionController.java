@@ -112,7 +112,7 @@ public class EnergyConsumptionController {
     public String delete(Long idEnergyConsumption, RedirectAttributes redirectAttributes, Authentication authentication) {
         Customer customer = userService.getAuthenticatedCustomer(authentication);
         EnergyConsumption energyConsumption = energyConsumptionRepository.findByIdAndDeviceCustomer(idEnergyConsumption, customer)
-                .orElseThrow(() -> new IllegalArgumentException("Consumo de energia não encontrado para o cliente autenticado!"));
+                .orElseThrow(() -> new IllegalArgumentException("Consumo de energia não encontrado!"));
 
         energyConsumptionRepository.delete(energyConsumption);
         redirectAttributes.addFlashAttribute("msg", "Consumo de energia excluído com sucesso!");

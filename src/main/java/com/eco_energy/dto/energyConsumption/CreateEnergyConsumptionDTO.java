@@ -1,12 +1,12 @@
 package com.eco_energy.dto.energyConsumption;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public record CreateEnergyConsumptionDTO(
 
         @NotNull(message = "O tempo de uso não pode ser nulo")
-        LocalDateTime usageTime,
+        LocalTime usageTime,
 
         @NotNull(message = "O consumo em kWh não pode ser nulo")
         Double kwhConsumption,

@@ -3,11 +3,12 @@ package com.eco_energy.dto.energyConsumption;
 import com.eco_energy.model.EnergyConsumption;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public record EnergyConsumptionDetailsDTO(
 
         Long energyConsumptionId,
-        LocalDateTime usageTime,
+        LocalTime usageTime,
         Double kwhConsumption,
         Double energyCost,
         LocalDateTime createdAt,

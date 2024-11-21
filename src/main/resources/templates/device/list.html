@@ -29,7 +29,6 @@
             <th>Frequência de Uso</th>
             <th>Data de Criação</th>
             <th>Data de Atualização</th>
-            <th>Cliente</th>
             <th>Ações</th>
         </tr>
         </thead>
@@ -41,7 +40,6 @@
             <td th:text="${device.usageFrequency}"></td>
             <td th:text="${device.createdAt}"></td>
             <td th:text="${device.updatedAt}"></td>
-            <td th:text="${device.customer.username}"></td>
             <td>
                 <a th:href="@{/device/update/}+${device.id}" class="btn btn-sm btn-primary">Editar</a>
                 <button th:onclick="|deviceId.value = ${device.id}|" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
