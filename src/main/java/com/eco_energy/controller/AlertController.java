@@ -3,11 +3,14 @@ package com.eco_energy.controller;
 import com.eco_energy.dto.alert.CreateAlertDTO;
 import com.eco_energy.dto.alert.UpdateAlertDTO;
 import com.eco_energy.model.Alert;
+import com.eco_energy.model.Customer;
 import com.eco_energy.model.Device;
 import com.eco_energy.model.enums.AlertLevel;
 import com.eco_energy.repository.AlertRepository;
 import com.eco_energy.repository.DeviceRepository;
+import com.eco_energy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -27,19 +30,24 @@ public class AlertController {
     AlertRepository alertRepository;
     @Autowired
     DeviceRepository deviceRepository;
+    @Autowired
+    UserService userService;
 
     @GetMapping("register")
-    public String register(CreateAlertDTO alertDTO, Model model) {
+    public String register(CreateAlertDTO alertDTO, Model model, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+
         model.addAttribute("alertDTO", new CreateAlertDTO("", false, null, null));
         model.addAttribute("alertLevel", AlertLevel.values());
-        model.addAttribute("devices", deviceRepository.findAll());
+        model.addAttribute("devices", deviceRepository.findByCustomer(customer));
         return "alert/register";
     }
 
     @PostMapping("register")
     @Transactional
-    public String register(CreateAlertDTO alertDTO, RedirectAttributes redirectAttributes) {
-        Device device = deviceRepository.findById(alertDTO.deviceId())
+    public String register(CreateAlertDTO alertDTO, RedirectAttributes redirectAttributes, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Device device = deviceRepository.findByIdAndCustomer(alertDTO.deviceId(), customer)
                 .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado!"));
 
         Alert alert = new Alert(
@@ -55,15 +63,17 @@ public class AlertController {
     }
 
     @GetMapping("list")
-    public String list(Model model) {
-        List<Alert> alerts = alertRepository.findAll();
+    public String list(Model model, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        List<Alert> alerts = alertRepository.findByDeviceCustomer(customer);
         model.addAttribute("alerts", alerts);
         return "alert/list";
     }
 
     @GetMapping("update/{id}")
-    public String update(@PathVariable("id") Long id, Model model) {
-        Alert alert = alertRepository.findById(id)
+    public String update(@PathVariable("id") Long id, Model model, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Alert alert = alertRepository.findByIdAndDeviceCustomer(id, customer)
                 .orElseThrow(() -> new IllegalArgumentException("Alerta não encontrado!"));
 
         UpdateAlertDTO alertDTO = new UpdateAlertDTO(
@@ -76,17 +86,18 @@ public class AlertController {
 
         model.addAttribute("alertDTO", alertDTO);
         model.addAttribute("alertLevel", AlertLevel.values());
-        model.addAttribute("devices", deviceRepository.findAll());
+        model.addAttribute("devices", deviceRepository.findByCustomer(customer));
         return "alert/update";
     }
 
     @PostMapping("update")
     @Transactional
-    public String update(UpdateAlertDTO alertDTO, RedirectAttributes redirectAttributes) {
-        Alert alert = alertRepository.findById(alertDTO.id())
+    public String update(UpdateAlertDTO alertDTO, RedirectAttributes redirectAttributes, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Alert alert = alertRepository.findByIdAndDeviceCustomer(alertDTO.id(), customer)
                 .orElseThrow(() -> new IllegalArgumentException("Alerta não encontrado!"));
 
-        Device device = deviceRepository.findById(alertDTO.deviceId())
+        Device device = deviceRepository.findByIdAndCustomer(alertDTO.deviceId(), customer)
                 .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado!"));
 
         alert.setMessage(alertDTO.message());
@@ -102,8 +113,12 @@ public class AlertController {
 
     @PostMapping("delete")
     @Transactional
-    public String delete(Long idAlert, RedirectAttributes redirectAttributes) {
-        alertRepository.deleteById(idAlert);
+    public String delete(Long idAlert, RedirectAttributes redirectAttributes, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Alert alert = alertRepository.findByIdAndDeviceCustomer(idAlert, customer)
+                .orElseThrow(() -> new IllegalArgumentException("Alerta não encontrado para o cliente autenticado!"));
+
+        alertRepository.delete(alert);
         redirectAttributes.addFlashAttribute("msg", "Alerta excluído com sucesso!");
         return "redirect:/alert/list";
     }

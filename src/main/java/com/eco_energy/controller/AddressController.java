@@ -5,7 +5,7 @@ import com.eco_energy.dto.address.UpdateAddressDTO;
 import com.eco_energy.model.Address;
 import com.eco_energy.model.Customer;
 import com.eco_energy.repository.AddressRepository;
-import com.eco_energy.repository.CustomerRepository;
+import com.eco_energy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import java.util.List;
 public class AddressController {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserService userService;
     @Autowired
     private AddressRepository addressRepository;
 
@@ -38,9 +38,7 @@ public class AddressController {
     @PostMapping("register")
     @Transactional
     public String register(CreateAddressDTO addressDTO, RedirectAttributes redirectAttributes, Authentication authentication){
-        String username = authentication.getName();
-
-        Customer customer = customerRepository.findByUsername(username);
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
         if(customer == null) new IllegalArgumentException("Cliente não encontrado!");
         assert customer != null;
 
@@ -57,15 +55,17 @@ public class AddressController {
     }
 
     @GetMapping("list")
-    public String list(Model model) {
-        List<Address> addresses = addressRepository.findAll();
+    public String list(Model model, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        List<Address> addresses = addressRepository.findByCustomer(customer);
         model.addAttribute("addresses", addresses);
         return "address/list";
     }
 
     @GetMapping("update/{id}")
-    public String update(@PathVariable("id") Long id, Model model) {
-        Address address = addressRepository.findById(id)
+    public String update(@PathVariable("id") Long id, Model model, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Address address = addressRepository.findByIdAndCustomer(id, customer)
                 .orElseThrow(() -> new IllegalArgumentException("Endereço não encontrado!"));
 
         UpdateAddressDTO addressDTO = new UpdateAddressDTO(
@@ -76,14 +76,14 @@ public class AddressController {
         );
 
         model.addAttribute("addressDTO", addressDTO);
-        model.addAttribute("customers", customerRepository.findAll());
         return "address/update";
     }
 
     @PostMapping("update")
     @Transactional
-    public String update(UpdateAddressDTO addressDTO, RedirectAttributes redirectAttributes) {
-        Address address = addressRepository.findById(addressDTO.id())
+    public String update(UpdateAddressDTO addressDTO, RedirectAttributes redirectAttributes, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Address address = addressRepository.findByIdAndCustomer(addressDTO.id(), customer)
                 .orElseThrow(() -> new IllegalArgumentException("Endereço não encontrado!"));
 
         address.setStreet(addressDTO.street());
@@ -99,8 +99,12 @@ public class AddressController {
 
     @PostMapping("delete")
     @Transactional
-    public String delete(Long idAddress, RedirectAttributes redirectAttributes) {
-        addressRepository.deleteById(idAddress);
+    public String delete(Long idAddress, RedirectAttributes redirectAttributes, Authentication authentication) {
+        Customer customer = userService.getAuthenticatedCustomer(authentication);
+        Address address = addressRepository.findByIdAndCustomer(idAddress, customer)
+                .orElseThrow(() -> new IllegalArgumentException("Endereço não encontrado ou não pertence ao usuário!"));
+
+        addressRepository.delete(address);
         redirectAttributes.addFlashAttribute("msg", "Endereço excluído com sucesso!");
         return "redirect:/address/list";
     }

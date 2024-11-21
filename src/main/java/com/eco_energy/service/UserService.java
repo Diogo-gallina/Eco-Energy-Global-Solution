@@ -5,6 +5,7 @@ import com.eco_energy.model.Role;
 import com.eco_energy.repository.RoleRepository;
 import com.eco_energy.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,5 +53,14 @@ public class UserService implements UserDetailsService {
                 user.getPassword(),
                 authorities
         );
+    }
+
+    public Customer getAuthenticatedCustomer(Authentication authentication) {
+        String username = authentication.getName();
+        Customer customer = userRepository.findByUsername(username);
+
+        if (customer == null) throw new IllegalArgumentException("Cliente não encontrado!");
+
+        return customer;
     }
 }

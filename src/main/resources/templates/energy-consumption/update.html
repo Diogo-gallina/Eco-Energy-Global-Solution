@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Atualizar Consumo de Energia</title>
@@ -39,7 +40,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Atualizar Consumo</button>
+        <button type="submit" class="alert alert-success">Atualizar Consumo</button>
     </form>
 </div>
 </body>
