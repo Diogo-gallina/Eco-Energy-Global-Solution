@@ -8,12 +8,6 @@ public record CreateEnergyConsumptionDTO(
         @NotNull(message = "O tempo de uso não pode ser nulo")
         LocalTime usageTime,
 
-        @NotNull(message = "O consumo em kWh não pode ser nulo")
-        Double kwhConsumption,
-
-        @NotNull(message = "O custo da energia não pode ser nulo")
-        Double energyCost,
-
         @NotNull(message = "O ID do dispositivo não pode ser nulo")
         Long deviceId
 ) { }

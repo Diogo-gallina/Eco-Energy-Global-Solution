@@ -2,9 +2,12 @@ package com.eco_energy.controller;
 
 import com.eco_energy.dto.energyConsumption.CreateEnergyConsumptionDTO;
 import com.eco_energy.dto.energyConsumption.UpdateEnergyConsumptionDTO;
+import com.eco_energy.model.Alert;
 import com.eco_energy.model.Customer;
 import com.eco_energy.model.Device;
 import com.eco_energy.model.EnergyConsumption;
+import com.eco_energy.model.enums.AlertLevel;
+import com.eco_energy.repository.AlertRepository;
 import com.eco_energy.repository.DeviceRepository;
 import com.eco_energy.repository.EnergyConsumptionRepository;
 import com.eco_energy.service.UserService;
@@ -28,6 +31,8 @@ public class EnergyConsumptionController {
     @Autowired
     EnergyConsumptionRepository energyConsumptionRepository;
     @Autowired
+    AlertRepository alertRepository;
+    @Autowired
     DeviceRepository deviceRepository;
     @Autowired
     private UserService userService;
@@ -35,7 +40,7 @@ public class EnergyConsumptionController {
     @GetMapping("register")
     public String register(CreateEnergyConsumptionDTO energyConsumptionDTO, Model model, Authentication authentication) {
         Customer customer = userService.getAuthenticatedCustomer(authentication);
-        model.addAttribute("energyConsumptionDTO", new CreateEnergyConsumptionDTO(null, null, null, null));
+        model.addAttribute("energyConsumptionDTO", new CreateEnergyConsumptionDTO(null, null));
         model.addAttribute("devices", deviceRepository.findByCustomer(customer));
         return "energy-consumption/register";
     }
@@ -49,10 +54,19 @@ public class EnergyConsumptionController {
 
         EnergyConsumption energyConsumption = new EnergyConsumption(
                 energyConsumptionDTO.usageTime(),
-                energyConsumptionDTO.kwhConsumption(),
-                energyConsumptionDTO.energyCost(),
                 device
         );
+
+        Double totalKwhConsumption = customer.getDevices().stream()
+                .flatMap(d -> d.getEnergyConsumptions().stream())
+                .mapToDouble(EnergyConsumption::getKwhConsumption)
+                .sum();
+
+        double totalCost = calculateTotalEnergyCostForCustomer(customer);
+
+        if (totalKwhConsumption > 30) {
+            this.registerAutomaticAlert(energyConsumption.getDevice(), totalKwhConsumption, totalCost);
+        }
 
         energyConsumptionRepository.save(energyConsumption);
         redirectAttributes.addFlashAttribute("msg", "Consumo de energia registrado com sucesso!");
@@ -76,8 +90,6 @@ public class EnergyConsumptionController {
         UpdateEnergyConsumptionDTO energyConsumptionDTO = new UpdateEnergyConsumptionDTO(
                 energyConsumption.getId(),
                 energyConsumption.getUsageTime(),
-                energyConsumption.getKwhConsumption(),
-                energyConsumption.getEnergyCost(),
                 energyConsumption.getDevice().getId()
         );
 
@@ -97,9 +109,22 @@ public class EnergyConsumptionController {
                 .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado!"));
 
         energyConsumption.setUsageTime(energyConsumptionDTO.usageTime());
-        energyConsumption.setKwhConsumption(energyConsumptionDTO.kwhConsumption());
-        energyConsumption.setEnergyCost(energyConsumptionDTO.energyCost());
+        energyConsumption.setKwhConsumption(device);
+        Double kwhConsumption = energyConsumption.getKwhConsumption();
+
+        energyConsumption.setEnergyCost(kwhConsumption);
         energyConsumption.setDevice(device);
+
+        Double totalKwhConsumption = customer.getDevices().stream()
+                .flatMap(d -> d.getEnergyConsumptions().stream())
+                .mapToDouble(EnergyConsumption::getKwhConsumption)
+                .sum();
+
+        double totalCost = calculateTotalEnergyCostForCustomer(customer);
+
+        if (totalKwhConsumption > 30) {
+            this.registerAutomaticAlert(energyConsumption.getDevice(), totalKwhConsumption, totalCost);
+        }
 
         energyConsumptionRepository.save(energyConsumption);
 
@@ -119,4 +144,37 @@ public class EnergyConsumptionController {
         return "redirect:/energy-consumption/list";
     }
 
+
+    private void registerAutomaticAlert(Device device, Double totalKwhConsumption, Double totalCost) {
+        AlertLevel alertLevel;
+
+        if (totalKwhConsumption <= 100) {
+            alertLevel = AlertLevel.LOW;
+        } else if (totalKwhConsumption <= 220) {
+            alertLevel = AlertLevel.MEDIUM;
+        } else {
+            alertLevel = AlertLevel.HIGH;
+        }
+
+
+        String message = String.format(
+                "Consumo total de: %.2f kWh registrado. Custo total até o momento: R$ %.2f",
+                totalKwhConsumption,
+                totalCost
+        );
+
+        alertRepository.save(new Alert(message, false, alertLevel, device));
+    }
+
+    public double calculateTotalEnergyCostForCustomer(Customer customer) {
+        double totalCost = 0.0;
+
+        for (Device device : customer.getDevices()) {
+            for (EnergyConsumption energyConsumption : device.getEnergyConsumptions()) {
+                totalCost += energyConsumption.getEnergyCost();
+            }
+        }
+
+        return totalCost;
+    }
 }

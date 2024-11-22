@@ -35,8 +35,8 @@
         <tr th:each="energyConsumption : ${energyConsumptions}">
             <td th:text="${energyConsumption.id}"></td>
             <td th:text="${energyConsumption.usageTime}"></td>
-            <td th:text="${energyConsumption.kwhConsumption}"></td>
-            <td th:text="${energyConsumption.energyCost}"></td>
+            <td th:text="${energyConsumption.kwhConsumption} + ' kWh'"></td>
+            <td th:text="'R$: ' + ${energyConsumption.energyCost}"></td>
             <td th:text="${energyConsumption.device.name}"></td>
             <td th:text="${energyConsumption.createdAt}"></td>
             <td>
